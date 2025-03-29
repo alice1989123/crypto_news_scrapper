@@ -4,14 +4,13 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 import time
-from dotenv import load_dotenv
 import os
-from llama_runner import call_local_llama
+from llama_runner import call_llm
+from datetime import datetime
 
 
 
 # Load environment variables from .env file
-load_dotenv()
 
 
 
@@ -115,8 +114,8 @@ def run_ai_summary(start_url):
             - URL: {url}
         """
 
-        response = call_local_llama(prompt)
-        summaries.append(response)
+        response = call_llm(prompt)
+        summaries.append({"content" : response  , "timestamp" :datetime.now().isoformat()} )
         print(f"✅ [{i+1}/10] summarized")
         print("summary", response)
 
