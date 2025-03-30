@@ -2,6 +2,28 @@
 import os
 import requests
 from openai import OpenAI
+import boto3
+from botocore.exceptions import BotoCoreError, ClientError
+
+
+def get_openai_api_key():
+    api_key = os.getenv("OPENAI_API_KEY")
+    if api_key:
+        return api_key
+
+    # If not in environment, fetch from SSM Parameter Store
+    ssm = boto3.client("ssm", region_name=os.getenv("AWS_REGION", "eu-central-1"))
+    try:
+        response = ssm.get_parameter(
+            Name="/scraper/openai_api_key",
+            WithDecryption=True
+        )
+        return response["Parameter"]["Value"]
+    except (BotoCoreError, ClientError) as e:
+        raise RuntimeError("Failed to retrieve OpenAI API key from SSM") from e
+
+client = OpenAI(api_key=get_openai_api_key())
+
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
