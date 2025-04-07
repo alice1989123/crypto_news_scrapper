@@ -5,6 +5,10 @@ from bs4 import BeautifulSoup
 import time
 from model_runner import call_llm
 from datetime import datetime
+import boto3
+import os
+import json
+
 
 class Scrapper:
     def __init__(self):
@@ -91,8 +95,11 @@ def run_ai_summary(start_url):
     print("🔎 Extracting news headlines...")
     articles = bot.extract_news()
 
+    # 📨 SQS client
+    sqs = boto3.client('sqs', region_name='eu-central-1')
+    queue_url = os.environ['QUEUE_URL']  # set this via env or pass it in
+
     print("📰 Visiting each article to get summaries individually...")
-    summaries = []
     for i, (title, url) in enumerate(articles[:10]):
         content = bot.extract_full_article(url)
 
@@ -111,16 +118,24 @@ def run_ai_summary(start_url):
         """
 
         response = call_llm(prompt)
-        summaries.append({"content" : response  , "timestamp" :datetime.now().isoformat()} )
-        print(f"✅ [{i+1}/10] summarized")
-        print("summary", response)
+        timestamp = datetime.now().isoformat()
+        message_body = {
+            "headline": title,
+            "summary": response,
+            "url": url,
+            "timestamp": timestamp
+        }
+
+        # 🔥 Send to SQS
+        sqs.send_message(
+            QueueUrl=queue_url,
+            MessageBody=json.dumps(message_body)
+        )
+
+        print(f"✅ [{i+1}/10] summarized and sent to queue")
 
     bot.close()
 
-   
-    return  summaries
 
 if __name__ == "__main__":
-    result = run_ai_summary("https://crypto.news/")
-    print("\n📰 Top 10 Crypto News:\n")
-    print(result)
+    run_ai_summary("https://crypto.news/")
