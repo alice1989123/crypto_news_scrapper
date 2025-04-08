@@ -13,7 +13,7 @@ import json
 class Scrapper:
     def __init__(self):
         self.opts = Options()
-        self.opts.binary_location = "/opt/firefox/firefox"  # 👈 This is the correct way now
+        self.opts.binary_location = "/usr/bin/firefox"  # 👈 This is the correct way now
         self.opts.add_argument("--headless")
         self.opts.add_argument("--no-sandbox")
         self.opts.add_argument("--disable-dev-shm-usage")
