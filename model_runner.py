@@ -8,10 +8,10 @@ import logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-llama_cpp_host = os.getenv("LLAMA_CPP_HOST" )
+llama_cpp_host = os.getenv("LLAMA_HOST" )
 
 if not llama_cpp_host:
-    logger.error("LLAMA_CPP_HOST environment variable is not set")
+    logger.error("LLAMA_HOST environment variable is not set")
 
 def get_openai_api_key():
     api_key = os.getenv("OPENAI_API_KEY")
