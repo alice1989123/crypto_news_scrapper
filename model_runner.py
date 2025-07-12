@@ -29,7 +29,7 @@ def get_openai_api_key():
         raise RuntimeError("Failed to retrieve OpenAI API key from SSM") from e
 
 
-def call_llm(prompt, host="http://llama_cpp_host:8081", n_predict=1000):
+def call_llm(prompt, host=f"http://{llama_cpp_host}:8081", n_predict=1000):
     payload = {
         "prompt": prompt,
         "n_predict": n_predict,
