@@ -3,6 +3,15 @@ import requests
 from openai import OpenAI
 import boto3
 from botocore.exceptions import BotoCoreError, ClientError
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
+llama_cpp_host = os.getenv("LLAMA_CPP_HOST" )
+
+if not llama_cpp_host:
+    logger.error("LLAMA_CPP_HOST environment variable is not set")
 
 def get_openai_api_key():
     api_key = os.getenv("OPENAI_API_KEY")
@@ -20,7 +29,7 @@ def get_openai_api_key():
         raise RuntimeError("Failed to retrieve OpenAI API key from SSM") from e
 
 
-def call_llm(prompt, host="http://10.66.66.1:8081", n_predict=1000):
+def call_llm(prompt, host="http://llama_cpp_host:8081", n_predict=1000):
     payload = {
         "prompt": prompt,
         "n_predict": n_predict,
