@@ -33,11 +33,11 @@ WORKDIR /app
 COPY scraper.py .
 COPY model_runner.py .
 COPY requirements.txt .
-
-
+COPY start_scraper.sh .
+RUN chmod +x /app/start_scraper.sh
 
 # Install Python dependencies
 RUN pip3 install -r requirements.txt
 
 # Run the script inside a virtual framebuffer
-CMD ["xvfb-run", "-a", "python3", "scraper.py"]
+ENTRYPOINT ["/app/start_scraper.sh"]
