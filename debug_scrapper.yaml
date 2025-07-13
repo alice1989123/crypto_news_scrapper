@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug-scraper
+  namespace: production
+spec:
+  containers:
+    - name: base
+      image: registry-docker-registry.registry.svc.cluster.local:5000/crypto_news_scrapper:latest
+      command: [ "sleep" ]
+      args: [ "3600" ]
+      envFrom:
+        - secretRef:
+            name: crypto-env-file
+  restartPolicy: Never
