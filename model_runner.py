@@ -37,7 +37,7 @@ def call_llm(prompt, host=f"http://{llama_cpp_host}:8081", n_predict=1000):
     }
 
     try:
-        response = requests.post(f"{host}/completion", json=payload, timeout=10)
+        response = requests.post(f"{host}/completion", json=payload, timeout=900)
         response.raise_for_status()
         return response.json().get("content", "").strip()
     
