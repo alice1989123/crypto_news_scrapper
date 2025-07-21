@@ -116,15 +116,18 @@ def run_ai_summary(start_url):
             - Summary: ...
             - URL: {url}
         """
-
-        response = call_llm(prompt)
-        timestamp = datetime.now().isoformat()
-        message_body = {
-            "headline": title,
-            "summary": response,
-            "url": url,
-            "timestamp": timestamp
-        }
+        try:
+            response = call_llm(prompt)
+            timestamp = datetime.now().isoformat()
+            message_body = {
+                "headline": title,
+                "summary": response,
+                "url": url,
+                "timestamp": timestamp
+            }
+        except Exception as e:
+            print(f"❌ Error summarizing article {i+1}: {e}")
+            continue
 
         # 🔥 Send to SQS
         sqs.send_message(
