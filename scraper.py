@@ -93,7 +93,6 @@ def run_ai_summary(start_url):
     time.sleep(3)
 
     print("🔎 Extracting news headlines...")
-    print("🔎 Hello!!!...")
     articles = bot.extract_news()
 
     # 📨 SQS client
