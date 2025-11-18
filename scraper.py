@@ -96,7 +96,7 @@ def run_ai_summary(start_url):
     articles = bot.extract_news()
 
     # 📨 SQS client
-    sqs = boto3.client('sqs', region_name='eu-central-1')
+    sqs = boto3.client('sqs', region_name=os.getenv("AWS_DEFAULT_REGION", "mx-central-1"))
     queue_url = os.environ['QUEUE_URL']  # set this via env or pass it in
 
     print("📰 Visiting each article to get summaries individually...")
