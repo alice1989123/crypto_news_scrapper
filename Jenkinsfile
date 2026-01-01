@@ -16,7 +16,7 @@ spec:
   }
 
   environment {
-    IMAGE_BASE = 'registry-docker-registry.registry.svc.cluster.local:5000/crypto_news_scrapper'
+    IMAGE_BASE = 'registry-docker-registry.registry.svc.cluster.local:5000/crypto_news_scrapper_v2'
   }
 
   stages {
